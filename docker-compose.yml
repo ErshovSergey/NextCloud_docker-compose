@@ -1,19 +1,12 @@
 version: '2'
 
 services:
-  nextcloud-data:
-    image: busybox
-    container_name: "${DOMAIN_NAME}_nextcloud-data"
-    volumes:
-      - "${DATA_PATH}:/var/www/html"
-
   app:
     image: nextcloud
+    container_name: "${DOMAIN_NAME}_nextcloud"
     ports:
       -  "${HTTP_IP}:${HTTP_PORT}:80"
-    volumes_from:
-      - nextcloud-data
-    depends_on:
-      - nextcloud-data
+    volumes:
+      - "${DATA_PATH}:/var/www/html"
     restart: always
 
