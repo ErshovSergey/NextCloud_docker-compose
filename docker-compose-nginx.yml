@@ -1,0 +1,32 @@
+version: '2'
+# при использовании доступа по ssl
+# ключ и сертификат положить в ${DATA_PATH}/certs
+# имя ключа и сертификата должны совпадать с переменной $VIRTUAL_HOST
+# т.е. в текущем случае
+# cloud.example.ru.crt
+# cloud.example.ru.key
+
+services:
+  nextcloud:
+    image: nextcloud
+    hostname: nextcloud
+    container_name: "${DOMAIN_NAME}_nextcloud"
+    volumes:
+      - "${DATA_PATH}/DATA:/var/www/html"
+    restart: always
+    environment:
+      - VIRTUAL_HOST=cloud.example.ru
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    hostname: reverseproxy
+    container_name: "${DOMAIN_NAME}_reverse_proxy"
+    ports:
+      -  "${HTTP_IP}:${HTTP_PORT}:80"
+      -  "${HTTP_IP}:${HTTPS_PORT}:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ${DATA_PATH}/certs:/etc/nginx/certs:ro
+      - ${DATA_PATH}/vhost.d:/etc/nginx/vhost.d:ro
+      - ${DATA_PATH}/proxy.conf:/etc/nginx/proxy.conf:ro
+    restart: always
