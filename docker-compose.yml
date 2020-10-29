@@ -1,8 +1,9 @@
 version: '2'
 
 services:
-  app:
+  nextcloud:
     image: nextcloud
+    hostname: nextcloud
     container_name: "${DOMAIN_NAME}_nextcloud"
     ports:
       -  "${HTTP_IP}:${HTTP_PORT}:80"
