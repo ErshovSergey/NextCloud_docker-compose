@@ -1,15 +1,18 @@
-# NextCloud_docker-compose
+# NextCloud_docker-compose  
 nextcloud запущенный через docker-compose
 
-по мотивам https://hub.docker.com/_/nextcloud/
+по мотивам https://hub.docker.com/_/nextcloud/  
+Создать  
+```docker-compose down --remove-orphans```  
+Пересоздать  
+```docker-compose up --build -d --remove-orphans --force-recreate```  
 
-docker-compose down --remove-orphans
-
-docker-compose up --build -d --remove-orphans --force-recreate
-
+## cron - регулярные задания  
+Простой и не совсем правильный способ - на хостовой машине создать задание в cron  
+    */5 * * * * docker exec -u www-data kcc.elavt.spb.ru_nextcloud php cron.php
 
 ### Команды упраления  
-**Пересканировать каталог**
+**Пересканировать каталог**  
 ```
 su -s "/bin/bash" www-data
     /var/www/html/occ files:scan <username>
