@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+  nextcloud:
+    image: nextcloud:latest
+    hostname: kcc.elavt.spb.ru
+    container_name: "${DOMAIN_NAME}_nextcloud"
+    ports:
+#      -  "${HTTP_IP}:${HTTP_PORT}:80"
+      -  "${HTTP_IP2}:${HTTP_PORT2}:80"
+    volumes:
+      - "${DATA_PATH}:/var/www/html"
+    restart: always
+    extra_hosts:
+    # FQDN сервера Collabora
+      colla.nextcloud.c.ru: 10.10.b.a
+      nextcloud.c.ru: 10.10.b.a
+
+  collaboraonline:
+    image: collabora/code
+    hostname: colla.nextcloud.c.ru
+    container_name: "${DOMAIN_NAME}_collaboraonline"
+    ports:
+      -  "${COLLABORA_HTTP_IP}:${COLLABORA_HTTP_PORT}:9980"
+    environment:
+      - username=${COLLABORA_USERNAME}
+      - password=${COLLABORA_PASSWORD}
+      - aliasgroup1=${ALIASGROUP1}
+    restart: always
+
+    extra_hosts:
+    # FQDN сервера kcc
+      nextcloud.c.ru: 10.10.b.a
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
