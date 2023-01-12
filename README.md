@@ -68,3 +68,31 @@ php occ trashbin:cleanup bob
   docker rm <container_name>
   docker run <OPTIONS> -d nextcloud
 ```
+
+### Обновление Nextcloud в контейнере на несколько версий - требует проверки  
+- удалить (если есть) файл */var/www/html/config/update.config.php* 
+- создать файл */var/www/html/config/update.config.php* с указанием версий, которым доверяем, пример файла при обновлении с 20 на 25
+```
+<?php
+$OC_Version = array(20,0,1,1);
+$OC_VersionString = '20.0.1';
+$OC_Edition = '';
+$OC_Channel = 'stable';
+$OC_VersionCanBeUpgradedFrom = array (
+  'nextcloud' =>
+  array (
+    '20.0' => true,
+    '21.0' => true,
+    '22.0' => true,
+    '23.0' => true,
+    '24.0' => true,
+    '25.0' => true,
+  ),
+  'owncloud' =>
+  array (
+    '10.5' => true,
+  ),
+);
+$vendor = 'nextcloud';
+```
+- пересоздать последовательно для всех версий контейнер из образа "текущая версия Nextcloud + один" каждый раз запуская обновление  
