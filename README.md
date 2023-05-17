@@ -9,7 +9,7 @@ nextcloud запущенный через docker-compose
 
 ## cron - регулярные задания  
 Простой и не совсем правильный способ - на хостовой машине создать задание в cron  
-    */5 * * * * docker exec -u www-data kcc.elavt.spb.ru_nextcloud php cron.php
+    */5 * * * * docker exec -u www-data ${DOMAIN_NAME}_nextcloud-main php cron.php  
 
 ### Команды упраления  
 **Пересканировать каталог**  
